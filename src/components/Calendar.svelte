@@ -1,62 +1,50 @@
 
-<script>
-	// import {createEventDispatcher, onMount} from 'svelte';
-	// let dispatch = createEventDispatcher();
-
-  import { each } from "svelte/internal";
+<script lang="ts">
+  import { onMount } from "svelte";
+  import type { Day } from "../models/DayType";
+  import type { HistoryGameType } from "../models/HistoryGameType";
 
   const  dayNames = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"];
 	const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
 
-	// let headers = [];
-	let now = new Date();
-	let year = now.getFullYear();	
-	let month = now.getMonth();
 
-	let days = [];
+	let now: Date = new Date();
+	let year:number = now.getFullYear();	
+	let month:number = now.getMonth();
+	let days: Day[] = [];
 
+	$: month,year, initMonth();
 
-	$: month,year,initContent();
-
-	function initContent() {
-		// headers = dayNames;
-		initMonth();
-	}
-
-	function initMonth() {
+	function initMonth(): void {
 		days = [];
 
-		const firstDay = new Date(year, month, 0).getDay();
-		const daysInThisMonth = new Date(year, month+1, 0).getDate();
-    const daysInLastMonth = new Date(year, month, 0).getDate();
-		const prevMonth = month == 0 ? 11 : month-1;
-    console.log(daysInLastMonth)
+		const firstDay: number = new Date(year, month, 0).getDay();
+		const daysInThisMonth: number = new Date(year, month+1, 0).getDate();
+    const daysInLastMonth: number = new Date(year, month, 0).getDate();
+		const prevMonth: number = month == 0 ? 11 : month-1;
 
-		for (let i = daysInLastMonth-firstDay; i<daysInLastMonth; i++) {
-			let d = new Date(prevMonth==11 ? year-1 : year, prevMonth,i+1).toLocaleDateString();
+		for (let i: number = daysInLastMonth-firstDay; i<daysInLastMonth; i++) {
+			let d: string = new Date(prevMonth==11 ? year-1 : year, prevMonth,i+1).toLocaleDateString();
 			days.push({name:''+(i+1),enabled:false,date:d,});
 		}
-		for (let i=0; i<daysInThisMonth; i++) {
-			let d = new Date(year , month, i+1).toLocaleDateString();
+		for (let i : number = 0; i<daysInThisMonth; i++) {
+			let d: string = new Date(year , month, i+1).toLocaleDateString();
 			days.push({name:''+(i+1),enabled:true,date:d,});
 		}
-		for (let i=0; days.length%7; i++) {
-			let d = new Date((month == 11 ? year+1 : year),(month+1)%12,i+1).toLocaleDateString();
+		for (let i: number = 0; days.length%7; i++) {
+			let d: string = new Date((month == 11 ? year+1 : year),(month+1)%12,i+1).toLocaleDateString();
 			days.push({name:''+(i+1),enabled:false,date:d,});
 		}
 	}
 
-  console.log(now.toLocaleDateString());
-
-
-	function next() {
+	function next(): void {
 		month++;
 		if (month == 12) {
  			year++;
 			month=0;
 		}
 	}
-	function prev() {
+	function prev(): void {
 		if (month==0) {
 			month=11;
 			year--;
@@ -65,7 +53,7 @@
 		}
 	}
 
-  const historyGames = [
+  const historyGames: HistoryGameType[] = [
     {
       date: "29/04/2023",
       title: "Игра: DFGDFGGD",
@@ -83,15 +71,17 @@
     }
   ]
 
-  let openDayHistory;
+  let openDayHistory: undefined | string;
 
-  function isGames(day) {
+  function isGames(day: string): boolean {
     for (let plan of historyGames) {
       if (plan.date === day) {
         return true;
       }
     }
   }
+
+  onMount(() => initMonth)
 </script>
 
 
