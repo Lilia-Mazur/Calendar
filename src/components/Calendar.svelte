@@ -24,15 +24,15 @@
 		const prevMonth: number = month == 0 ? 11 : month-1;
 
 		for (let i: number = daysInLastMonth-firstDay; i<daysInLastMonth; i++) {
-			let d: string = new Date(prevMonth==11 ? year-1 : year, prevMonth,i+1).toLocaleDateString();
+			let d: string = new Date(prevMonth==11 ? year-1 : year, prevMonth,i+1).toLocaleDateString("en-GB");
 			days.push({name:''+(i+1),enabled:false,date:d,});
 		}
 		for (let i : number = 0; i<daysInThisMonth; i++) {
-			let d: string = new Date(year , month, i+1).toLocaleDateString();
+			let d: string = new Date(year , month, i+1).toLocaleDateString("en-GB");
 			days.push({name:''+(i+1),enabled:true,date:d,});
 		}
 		for (let i: number = 0; days.length%7; i++) {
-			let d: string = new Date((month == 11 ? year+1 : year),(month+1)%12,i+1).toLocaleDateString();
+			let d: string = new Date((month == 11 ? year+1 : year),(month+1)%12,i+1).toLocaleDateString("en-GB");
 			days.push({name:''+(i+1),enabled:false,date:d,});
 		}
 	}
