@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import type { Day } from "../models/DayType";
   import type { HistoryGameType } from "../models/HistoryGameType";
+  import { nextArrow, prevArrow } from "../assets/img";
 
   const  dayNames = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"];
 	const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
@@ -56,7 +57,7 @@
   const historyGames: HistoryGameType[] = [
     {
       date: "29/04/2023",
-      title: "Игра: DFGDFGGD",
+      title: "DFGDFGGD",
       time: "19:00"
     },
     {
@@ -65,9 +66,9 @@
       time: "16:00"
     },
     {
-      date: "01/05/2023",
+      date: "21/05/2023",
       title: "Игра: DFGDFGGD",
-      time: "11:00"
+      time: "11:00",
     }
   ]
 
@@ -92,8 +93,12 @@
         {monthNames[month]} {year}
       </h1>
       <div class="nav">
-        <button on:click={()=>prev()}>&and;</button>
-        <button on:click={()=>next()}>&or;</button>
+        <button on:click={()=>prev()}>
+          <img src={prevArrow} alt="">
+        </button>
+        <button on:click={()=>next()}>
+          <img src={nextArrow} alt="">
+        </button>
       </div>
   
     </div>
@@ -114,9 +119,11 @@
       {/each}
     </div>
   </div>
+
   <div class="calendar__info" class:active={openDayHistory}>
     {#each historyGames as game }
       {#if game.date === openDayHistory}
+      <p class="info__title">{game.date.split('/').join('.')}</p>
       <div class="info__card">
         <p>{game.title}</p>
         <p>{game.time}</p>
@@ -127,58 +134,71 @@
 </div>
 
 
+
+
 <style lang="scss">
 .calendar {
-  width: max-content;
-  margin: auto;
   display: flex;
-  background: #1E1D2B;
-  border-radius: 16px;
+  gap: 50px;
+  justify-content: space-around;
   &__container {
-    padding: 14px 24px 17px;
-    background: linear-gradient(144.03deg, rgba(78, 77, 96, 0.6) 65%, rgba(174, 120, 225, 0.6) 181%);
-    border-radius: 16px;
+    width: max-content;
+    background: rgba(29, 29, 43, 0.26);
+    border-radius: 18px;
   }
-&__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 15px 21px;
 
-  h1 {
-    margin: 0;
-    font-size: 18px;
-    color: #fff;
-  }
+    h1 {
+      margin: 0;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 20px;
+      color: #fff;
+    }
 
-  button {
-    background: transparent;
-    border: 1px ;
-    padding: 6;
-    color: #fff;
-    cursor: pointer;
+    .nav {
+      display: flex;
+      gap: 16px;
+      button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+      img {
+        width: 16px;
+      }
+    }
+    }
   }
-}
 
   &__content { 
     display: grid;
-    width: 100%;
     grid-template-columns: repeat(7, 24px);
     grid-template-rows: 24px;
     grid-auto-rows: 24px;
-    gap: 8px;
+    gap: 18px 16px;
+    padding: 0 20px 21px;
     overflow: auto;
 
     .day {
       display: flex;
       align-items: center;
       justify-content: center;
-      letter-spacing: 1px;
+      font-weight: 400;
       font-size: 14px;
-      box-sizing: border-box;
+      line-height: 17px;
+      // box-sizing: border-box;
       color: #fff;
       position: relative;
       z-index: 1;
       cursor: pointer;
+      &:nth-child(7n-1), &:nth-child(7n){
+        color: #D4D7E0;
+      }
       &.disabled {
         color: #78778A;
         // cursor: not-allowed;
@@ -210,32 +230,51 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
-      text-transform: uppercase;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 18px;
       color: #78778A;;
       text-align: center;
-      font-weight: 500;
     }
   }
 
   &__info {
-    margin: 40px 14px;
-    margin-left: 16px;
-    margin-right: 14px;
-    width: 306px;
+    width: 100%;
+    max-width: 815px;
+    box-sizing: border-box;
+    background: rgba(29, 29, 43, 0.26);
+    backdrop-filter: blur(60px);
+    border-radius: 8px;
+    padding: 16px;
+    padding-right: 40px;
     display: none;
+    gap: 16px;
+    flex-direction: column;
     &.active {
-      display: block;
+      display: flex;
     }
     p {
       color: #fff;
       font-size: 16px;
     }
 
-    .info__card {
-      padding: 8px;
-      background: #2DD9E7;
-      border-radius: 8px;
+    .info{
+      &__title {
+        color: #20C8D5;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 29px;
+        font-variant: small-caps;
+      }
+      &__card {
+        background: rgba(78, 77, 96, 0.6);
+        backdrop-filter: blur(60px);
+        border-radius: 22px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
     }
   }
 }
