@@ -2,11 +2,11 @@
   margin: 0;
   font-family: 'Montserrat', sans-serif;
   font-style: normal;
+  box-sizing: border-box;
 }
-// main {
-//   padding-top: 100px;
-//   box-sizing: border-box;
-//   width: 100%;
-//   min-height: 100vh;
-//   background: #1E1D2B;
-// }
+main {
+  padding: 100px;
+  background: #1E1D2B;
+  min-height: 100vh;
+  box-sizing: border-box;
+}

@@ -87,50 +87,34 @@
 
 
 <div class="calendar">
-  <div class="calendar__container">
-    <div class="calendar__header">
-      <h1>
-        {monthNames[month]} {year}
-      </h1>
-      <div class="nav">
-        <button on:click={()=>prev()}>
-          <img src={prevArrow} alt="">
-        </button>
-        <button on:click={()=>next()}>
-          <img src={nextArrow} alt="">
-        </button>
-      </div>
-  
+  <div class="calendar__title">
+    <h2>{monthNames[month]} {year}</h2>
+    <div class="nav">
+      <button on:click={()=>prev()}>
+        <img src={prevArrow} alt="">
+      </button>
+      <button on:click={()=>next()}>
+        <img src={nextArrow} alt="">
+      </button>
     </div>
-    <div class="calendar__content">
-      {#each dayNames as name}
+  </div>
+  <div class="calendar__days">
+    {#each dayNames as name}
       <span class="day-name">{name}</span>
-      {/each}
-    
-      {#each days as day}
-          <span 
-            class="day"
-            class:disabled={!day.enabled}
-            class:today={now.toLocaleDateString('en-GB') === day.date}
-            class:is-games={isGames(day.date)}
-            class:active={openDayHistory === day.date}
-            on:click={() => openDayHistory === day.date ? openDayHistory = undefined : openDayHistory = day.date}
-          >{day.name}</span>
+    {/each}
+    {#each days as day}
+      <spa
+        class="day"
+        class:disabled={!day.enabled}
+        class:today={now.toLocaleDateString('en-GB') === day.date}
+        class:is-games={isGames(day.date)}
+        class:active={openDayHistory === day.date}
+        on:click={() => openDayHistory === day.date ? openDayHistory = undefined : openDayHistory = day.date}
+      >
+        {day.name}
+      </spa>
       {/each}
     </div>
-  </div>
-
-  <div class="calendar__info" class:active={openDayHistory}>
-    {#each historyGames as game }
-      {#if game.date === openDayHistory}
-      <p class="info__title">{game.date.split('/').join('.')}</p>
-      <div class="info__card">
-        <p>{game.title}</p>
-        <p>{game.time}</p>
-      </div>
-      {/if}
-    {/each}
-  </div>
 </div>
 
 
@@ -138,50 +122,39 @@
 
 <style lang="scss">
 .calendar {
-  display: flex;
-  gap: 50px;
-  justify-content: space-around;
-  &__container {
-    width: max-content;
-    background: rgba(29, 29, 43, 0.26);
-    border-radius: 18px;
-  }
-  &__header {
+  &__title {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 11px 15px 21px;
-
-    h1 {
-      margin: 0;
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 20px;
-      color: #fff;
-    }
+    padding-top: 12px;
+    padding-bottom: 21px;
 
     .nav {
       display: flex;
       gap: 16px;
       button {
-      border: none;
-      background: none;
-      cursor: pointer;
-      padding: 0;
-      img {
-        width: 16px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 0;
       }
     }
+
+    h2 {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 20px;
+      color: #fff;
     }
   }
 
-  &__content { 
+  &__days { 
     display: grid;
     grid-template-columns: repeat(7, 24px);
     grid-template-rows: 24px;
     grid-auto-rows: 24px;
-    gap: 18px 16px;
-    padding: 0 20px 21px;
+    gap: 17px 19px;
+    padding: 0 16px 0;
     overflow: auto;
 
     .day {
@@ -191,17 +164,14 @@
       font-weight: 400;
       font-size: 14px;
       line-height: 17px;
-      // box-sizing: border-box;
       color: #fff;
-      position: relative;
-      z-index: 1;
       cursor: pointer;
-      &:nth-child(7n-1), &:nth-child(7n){
+      &:nth-child(7n-1),
+      &:nth-child(7n){
         color: #D4D7E0;
       }
       &.disabled {
         color: #78778A;
-        // cursor: not-allowed;
       }
       &.active {
         background-color: #2DD9E7;
@@ -211,13 +181,13 @@
         position: relative;
         &::after {
           content: "";
-          width: 4px;
-          height: 4px;
+          width: 5px;
+          height: 5px;
           position: absolute;
           background: linear-gradient(334deg, #CF691E 15%, #FFC85C 86%);
           border-radius: 50%;
-          right: 1px;
-          top: 3px;
+          right: 0px;
+          top: 0px;
         }
       }
     }
@@ -233,48 +203,8 @@
       font-weight: 400;
       font-size: 15px;
       line-height: 18px;
-      color: #78778A;;
+      color: #78778A;
       text-align: center;
-    }
-  }
-
-  &__info {
-    width: 100%;
-    max-width: 815px;
-    box-sizing: border-box;
-    background: rgba(29, 29, 43, 0.26);
-    backdrop-filter: blur(60px);
-    border-radius: 8px;
-    padding: 16px;
-    padding-right: 40px;
-    display: none;
-    gap: 16px;
-    flex-direction: column;
-    &.active {
-      display: flex;
-    }
-    p {
-      color: #fff;
-      font-size: 16px;
-    }
-
-    .info{
-      &__title {
-        color: #20C8D5;
-        font-weight: 500;
-        font-size: 24px;
-        line-height: 29px;
-        font-variant: small-caps;
-      }
-      &__card {
-        background: rgba(78, 77, 96, 0.6);
-        backdrop-filter: blur(60px);
-        border-radius: 22px;
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
     }
   }
 }
